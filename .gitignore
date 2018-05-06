@@ -1,2 +1,4 @@
 *.db
-/data/*
+/data/*.zip
+/data/*.bz2
+/data/RC_2015-01

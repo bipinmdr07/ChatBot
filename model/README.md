@@ -1,0 +1,1 @@
+__This directory will be used for storing the trained model.__
