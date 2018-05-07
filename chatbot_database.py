@@ -66,7 +66,7 @@ def transaction_bldr(sql):
 
 def sql_insert_replace_comment(commentid, parentid, parent, comment, subreddit, time, score):
     try:
-        sql = "UPDATE parent_reply SET parent_id = ?, comment_id = ?, parent = ?, comment = ?, subreddit = ?, unix = ?, score = ? WHERE parent_id = ?;".format(parentid, commentid, parent, comment, subreddit, time, score)
+        sql = """UPDATE parent_reply SET parent_id = ?, comment_id = ?, parent = ?, comment = ?, subreddit = ?, unix = ?, score = ? WHERE parent_id = ?;""".format(parentid, commentid, parent, comment, subreddit, time, score)
         transaction_bldr(sql)
 
     except Exception as e:
