@@ -1,9 +1,12 @@
 import sqlite3
 import json
 from datetime import datetime
+import time
 
 timeframe = '2015-01'
 sql_transaction = []
+start_row = 0
+cleanup = 1000000
 
 connection = sqlite3.connect('{}.db'.format(timeframe))
 c = connection.cursor()
@@ -121,3 +124,12 @@ if __name__ == "__main__":
 
             if row_counter % 100000 == 0:
                 print("Total rows read: {}, Paired rows: {}, Time: {}".format(row_counter, paired_rows, str(datetime.now)))
+
+            if row_counter > start_row:
+                if row_counter % cleanup == 0:
+                    print("Cleaning up")
+                    sql = "DELETE FROM parent_reply WHERE parent IS NULL"
+                    c.execute(sql)
+                    connection.commit()
+                    c.execute("VACUUM")
+                    connection.commit()
