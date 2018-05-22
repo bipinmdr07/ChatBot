@@ -2,6 +2,7 @@ import sqlite3
 import json
 from datetime import datetime
 import time
+import re
 
 timeframe = '2015-01'
 sql_transaction = []
@@ -12,11 +13,39 @@ connection = sqlite3.connect('{}.db'.format(timeframe))
 c = connection.cursor()
 
 def create_table():
+    c.execute("DROP TABLE IF EXISTS parent_reply")
     c.execute("CREATE TABLE IF NOT EXISTS parent_reply(parent_id TEXT PRIMARY KEY, comment_id TEXT UNIQUE, parent TEXT, comment TEXT, subreddit TEXT, unix INT, score INT)")
 
 def format_data(data):
-    data = data.replace("\n", " newlinecharacter ").replace("/r", " newlinecharacter ").replace('"', "'")
+    data = data.replace("\n", " ").replace("/r", " ").replace('"', "'")
     return data
+
+def clean_text(text):
+    text = text.lower()
+
+    text = re.sub(r"i'm", "i am", text)
+    text = re.sub(r"he's", "he is", text)
+    text = re.sub(r"she's", "she is", text)
+    text = re.sub(r"it's", "it is", text)
+    text = re.sub(r"that's", "that is", text)
+    text = re.sub(r"what's", "what is", text)
+    text = re.sub(r"where's", "where is", text)
+    text = re.sub(r"how's", "how is", text)
+    text = re.sub(r"\'ll", " will", text)
+    text = re.sub(r"\'ve", " have", text)
+    text = re.sub(r"\'re", " are", text)
+    text = re.sub(r"\'d", " would", text)
+    text = re.sub(r"\'re", " are", text)
+    text = re.sub(r"\'s", " is", text)
+    text = re.sub(r"won't", "will not", text)
+    text = re.sub(r"can't", "can not", text)
+    text = re.sub(r"n't", " not", text)
+    text = re.sub(r"n'", "ng", text)
+    text = re.sub(r"'bout", "about", text)
+    text = re.sub(r"'til", "untile", text)
+    text = re.sub(r"[-()\"#/@;:<>{}`+=~|.!?,]", "", text)
+
+    return text
 
 def find_parent(pid):
     try:
@@ -103,6 +132,7 @@ if __name__ == "__main__":
             parent_id = row['parent_id']
             comment_id = row['name']
             body = format_data(row['body'])
+            body = clean_text(body)
             created_utc = row['created_utc']
             score = row['score']
             subreddit = row['subreddit']

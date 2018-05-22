@@ -1,6 +1,10 @@
 *.db
 /data/*.zip
 /data/*.bz2
+/data/2015/*.bz2
 /data/2015/RC_2015-01
+/data/reddit-data/*
 *.to
+.*
+*.pyc
 *.from
