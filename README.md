@@ -12,13 +12,16 @@ __Dependencies__
 
 __Setup__
 * First download the dataset from above link and extract it to <code>./data/</code> directory
-</pre>
 * Generate the test and train datas in the <code>./model</code> directory using the data in database by running following command:
 <pre>
-    $ python train.py
+    $ python3 train.py
 </pre>
 * If you want to resume the training of the model from where you have left then.
 <pre>
     # set load_model to True and run
-    $ python train.py
+    $ python3 train.py
+</pre>
+* Finally to chat with chatbot, run
+<pre>
+    $ python3 chat.py
 </pre>
